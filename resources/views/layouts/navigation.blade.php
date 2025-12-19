@@ -1,0 +1,1 @@
+<aside class="w-64 bg-white border-r hidden md:block"><div class="p-4 border-b"><a href="/role-redirect" class="text-lg font-bold">Xeon</a></div><nav class="p-4">@include('components.panel-menu')</nav></aside>

@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Base font sekitar 14px untuk seluruh web */
+    font-size: 14px;
+}
+
+@media (max-width: 640px) {
+    :root {
+        font-size: 13px;
+    }
+}
+
+/* Styling khusus print untuk dokumen resmi */
+@media print {
+    .print-document {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .print-document h1,
+    .print-document h2,
+    .print-document h3 {
+        font-weight: 600;
+    }
+}
