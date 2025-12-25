@@ -11,14 +11,17 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('order_id')
+                ->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('product_id')
+                ->constrained('products')->cascadeOnDelete();
 
             $table->string('name')->nullable();
             $table->json('attributes')->nullable();
-            $table->integer('qty')->default(1);
-            $table->decimal('price', 15, 2)->default(0.00);
-            $table->decimal('subtotal', 15, 2)->default(0.00);
+
+            $table->unsignedInteger('qty')->default(1);
+            $table->decimal('price', 15, 2)->default(0);
+            $table->decimal('subtotal', 15, 2)->default(0);
 
             $table->string('design_file')->nullable();
             $table->text('note')->nullable();

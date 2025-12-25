@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    public const HOME = '/role-redirect';
+    public const HOME = '/dashboard';
 
     public function boot()
     {

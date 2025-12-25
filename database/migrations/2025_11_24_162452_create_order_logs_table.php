@@ -10,11 +10,16 @@ return new class extends Migration
     {
         Schema::create('order_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('action');      // e.g. "start_design"
-            $table->string('description'); // readable text
+
+            $table->foreignId('order_id')
+                ->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->nullable()->constrained()->nullOnDelete();
+
+            $table->string('action');
+            $table->string('description');
             $table->json('meta')->nullable();
+
             $table->timestamps();
         });
     }

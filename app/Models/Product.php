@@ -3,9 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\CustomerSpecialPrice;
+use App\Models\ProductMemberPrice;
+use App\Models\CustomerPrice;
+use App\Models\InstansiPrice;
+use App\Models\MemberPrice;
+use App\Models\Inventory;
+use App\Models\DisplayGroup;
+use App\Models\ProductVariant;
+use App\Models\GlobalPricingRule;
+use App\Models\ProductAddon;
 
 class Product extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'sku',
         'name',
@@ -124,4 +137,6 @@ class Product extends Model
             'flat_price'   => $tier->flat_price ?? 0,
         ];
     }
+
+    use HasFactory;
 }

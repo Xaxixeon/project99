@@ -19,7 +19,7 @@ class DesignerController extends Controller
     {
         // Asumsi file_manager sudah ada
         $files = \DB::table('file_manager')
-            ->where('user_id', auth()->id())
+            ->where('user_id', auth('staff')->id())
             ->latest()
             ->get();
 

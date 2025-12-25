@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         // === CUSTOMERS ===
         $totalCustomers = Customer::count();
-        $activeCustomers = Customer::where('is_active', true)->count();
+        $activeCustomers = Customer::count();
 
         // === PRODUCTS ===
         $productCount = Product::count();

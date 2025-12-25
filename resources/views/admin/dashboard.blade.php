@@ -116,23 +116,29 @@
 
         <div class="card-body p-0">
             <table class="table table-dark table-hover m-0">
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Customer</th>
-                        <th>Total</th>
-                        <td>
-                            @if ($order->status === 'pending')
-                                <button class="btn btn-sm btn-success" onclick="markPaid({{ $order->id }})">
-                                    <i class="fa fa-check"></i> Mark as Paid
-                                </button>
-                            @else
-                                <span class="badge bg-success">Paid</span>
-                            @endif
-                        </td>
+                <tbody>
+                    @foreach ($latestOrders as $order)
+                        <tr>
+                            <td>#{{ $order->id }}</td>
+                            <td>{{ $order->customer->name ?? '-' }}</td>
+                            <td>Rp {{ number_format($order->total) }}</td>
+                            <td>
+                                @if ($order->status === 'pending')
+                                    <button class="btn btn-sm btn-success" onclick="markPaid({{ $order->id }})">
+                                        <i class="fa fa-check"></i> Mark as Paid
+                                    </button>
+                                @else
+                                    <span class="badge bg-success">Paid</span>
+                                @endif
+                            </td>
 
-                        <th>Waktu</th>
-                    </tr>
+                            <td>{{ $order->created_at->diffForHumans() }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+
+                <th>Waktu</th>
+                </tr>
                 </thead>
                 <tbody>
                     @foreach ($latestOrders as $order)

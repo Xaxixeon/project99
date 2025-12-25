@@ -25,6 +25,7 @@ use App\Http\Controllers\Customer\CustomerOrderController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DisplayGroupController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\PrintingMaterialController;
@@ -210,6 +211,7 @@ Route::middleware('auth:staff')->group(function () {
     Route::post('/tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('tasks.status');
     Route::post('/preorder/store', [PreorderController::class, 'store'])->name('preorder.store');
     Route::post('/preorder/delete', [PreorderController::class, 'delete'])->name('preorder.delete');
+    Route::post('/tasks/merge', [TaskController::class, 'mergeTasks'])->name('tasks.merge');
 
     // WAREHOUSE INVENTORY ACCESS (warehouse/admin/superadmin)
     Route::middleware('role:warehouse,admin,superadmin')->prefix('dashboard/warehouse')->name('warehouse.')->group(function () {
@@ -332,6 +334,10 @@ Route::middleware('auth:staff')->group(function () {
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
 
         // Dashboard
+        Route::get('/dashboard', function () {
+            return 'Dashboard';
+        })->name('dashboard');
+
         Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
         // Preview UI page (temporary/testing)
@@ -405,3 +411,37 @@ Route::middleware('auth:staff')->group(function () {
             Route::post('/pos/order', [CsPosController::class, 'store'])->name('pos.order.store');
         });
 });
+
+// ADMIN DASHBOARD ROUTE (legacy, sebelum ada role-redirect)
+Route::middleware(['auth:staff', 'role:admin'])
+    ->get('/admin/dashboard', [DashboardController::class, 'index'])
+    ->name('admin.dashboard');
+
+/* ============================================================
+ |  TaskController ROUTES  
+ * ============================================================ */
+
+Route::post('/tasks/merge', [TaskController::class, 'mergeTasks'])
+    ->name('tasks.merge');
+Route::post('/tasks/{task}/status', [TaskController::class, 'updateStatus'])
+    ->name('tasks.status');
+Route::post('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])
+    ->name('orders.update-status');
+Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])
+    ->name('orders.status');
+Route::post('/operations/{operation}/finish', [OrderOperationController::class, 'finish'])
+    ->name('orders.operations.finish');
+Route::post('/operations/{operation}/start', [OrderOperationController::class, 'start'])
+    ->name('orders.operations.start');
+Route::post('/orders/{order}/operations', [OrderOperationController::class, 'store'])
+    ->name('orders.operations.store');
+Route::post('/orders/{order}/qc', [QcController::class, 'store'])
+    ->name('orders.qc.store');
+Route::post('/staff/orders/{order}/chat', [OrderChatController::class, 'store'])
+    ->name('staff.orders.chat.store');
+Route::post('/staff/order-files/{file}/approve', [OrderFileController::class,   'approve'])
+    ->name('staff.order-files.approve');
+Route::post('/staff/orders/{order}/files', [OrderFileController::class, 'storeForStaff'])
+    ->name('staff.orders.files.store');
+Route::post('/customer/orders/{order}/files', [OrderFileController::class, 'storeForCustomer'])
+    ->name('customer.orders.files.store');

@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Shipping;
+
 
 class Order extends Model
 {
+    use HasFactory;
+    
     public const STATUS_NEW        = 'new';
     public const STATUS_ASSIGNED   = 'assigned';
     public const STATUS_DESIGN     = 'design';

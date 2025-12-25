@@ -21,7 +21,7 @@ class PreorderController extends Controller
             'product' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
             'deadline' => ['nullable', 'date'],
-            'priority' => ['nullable', 'string', 'max:50'],
+            'priority' => ['nullable', 'in:low,medium,high'],
         ]);
 
         $clientUpdated = $data['updated_at'] ?? now()->timestamp;
@@ -34,7 +34,9 @@ class PreorderController extends Controller
         }
 
         // Jika client punya versi lebih baru → override
-        $serverStamp = $note->updated_at_client ? Carbon::parse($note->updated_at_client)->timestamp : 0;
+        $serverStamp = $note->updated_at_client ? $serverStamp = $note->updated_at_client
+            ? Carbon::parse($note->updated_at_client)->timestamp
+            : 0 : 0;
         if ($clientUpdated > $serverStamp) {
             return $this->applyClientUpdate($note, $data, $clientUpdated);
         }
@@ -71,7 +73,7 @@ class PreorderController extends Controller
         $noteId = $data['note_id'] ?? $this->generateNoteId();
         $payload = array_merge($data, [
             'note_id' => $noteId,
-            'user_id' => auth()->id(),
+            'user_id' => auth('staff')->id(), // FIX
             'updated_at_client' => Carbon::createFromTimestamp($clientUpdated),
         ]);
 

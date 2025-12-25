@@ -11,8 +11,10 @@ return new class extends Migration
         Schema::create('order_activity_logs', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('staff_id')->nullable();
+            $table->foreignId('order_id')
+                ->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('staff_id')
+                ->nullable()->constrained('staff_users')->nullOnDelete();
 
             $table->string('from_status', 50)->nullable();
             $table->string('to_status', 50)->nullable();
@@ -25,16 +27,13 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index('order_id');
-            $table->index('staff_id');
-            $table->index('from_status');
-            $table->index('to_status');
+            $table->index(['order_id', 'staff_id']);
+            $table->index(['from_status', 'to_status']);
 
-            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
-            // staff_id dibiarkan nullable, sesuaikan nama tabel staff jika berbeda
-            if (Schema::hasTable('staff_users')) {
-                $table->foreign('staff_id')->references('id')->on('staff_users')->nullOnDelete();
-            }
+            $this->assertDatabaseHas('order_activity_logs', [
+                'from_status' => 'pending',
+                'to_status'   => 'in_progress',
+            ]);
         });
     }
 

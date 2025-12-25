@@ -14,27 +14,32 @@ return new class extends Migration
 
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
             $table->string('order_code')->unique();
-            $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('customer_id')->nullable()
+                ->constrained('customers')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()
+                ->constrained('users')->nullOnDelete();
 
-            $table->decimal('subtotal', 15, 2)->default(0.00);
-            $table->decimal('shipping', 15, 2)->default(0.00);
-            $table->integer('subtotal');
-            $table->integer('discount_percent')->default(0);
-            $table->integer('discount_amount')->default(0);
-            $table->integer('tax_amount')->default(0);
-            $table->integer('total');
+            // FINANCIAL
+            $table->decimal('subtotal', 15, 2)->default(0);
+            $table->decimal('shipping', 15, 2)->default(0);
+            $table->decimal('discount_amount', 15, 2)->default(0);
+            $table->decimal('tax_amount', 15, 2)->default(0);
+            $table->decimal('total', 15, 2)->default(0);
+            $table->unsignedTinyInteger('discount_percent')->default(0);
 
+            // STATUS
             $table->enum('status', [
                 'pending',
                 'confirmed',
                 'production',
                 'printing',
                 'completed',
-                'cancelled'
+                'cancelled',
             ])->default('pending');
 
+            // META
             $table->text('notes')->nullable();
             $table->json('meta')->nullable();
 

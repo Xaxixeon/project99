@@ -619,6 +619,7 @@ class OrderController extends Controller
      */
     public function updateStatus(Request $request, Order $order)
     {
+        $this->authorize('updateStatus', $task);
         $data = $request->validate([
             'status'     => ['required', 'string', 'max:50'],
             'updated_at' => ['nullable', 'numeric'],
